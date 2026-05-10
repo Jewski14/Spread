@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block title %}Portfolio — Cattle Spreads{% endblock %}
+
+{% block main %}
+<!-- Macro header strip: 8 cells -->
+<div class="regime-strip">
+  <div class="regime-cell">
+    <div class="rc-label">Market Structure</div>
+    <div class="rc-val" id="ph-structure-val">—</div>
+  </div>
+  <div class="regime-cell">
+    <div class="rc-label">LE Convexity</div>
+    <div class="rc-val" id="ph-le-conv-val">—</div>
+  </div>
+  <div class="regime-cell">
+    <div class="rc-label">GF Convexity</div>
+    <div class="rc-val" id="ph-gf-conv-val">—</div>
+  </div>
+  <div class="regime-cell">
+    <div class="rc-label">GSCI Roll</div>
+    <div class="rc-val" id="ph-gsci-val">—</div>
+  </div>
+  <div class="regime-cell">
+    <div class="rc-label">BCOM Roll</div>
+    <div class="rc-val" id="ph-bcom-val">—</div>
+  </div>
+  <div class="regime-cell">
+    <div class="rc-label">COT LE</div>
+    <div class="rc-val" id="ph-cot-le-val">—</div>
+    <div class="rc-sub" id="ph-cot-le-sub"></div>
+  </div>
+  <div class="regime-cell">
+    <div class="rc-label">COT GF</div>
+    <div class="rc-val" id="ph-cot-gf-val">—</div>
+    <div class="rc-sub" id="ph-cot-gf-sub"></div>
+  </div>
+  <div class="regime-cell">
+    <div class="rc-label">Extremes</div>
+    <div class="rc-val" id="ph-extremes-val">—</div>
+    <div class="rc-sub">≥ 90th pct</div>
+  </div>
+</div>
+
+<!-- Two-column body -->
+<div class="portfolio-layout">
+
+  <!-- Correlation heatmap (60%) -->
+  <div class="portfolio-panel">
+    <div class="portfolio-panel-title">Correlation Matrix — Spread Returns</div>
+    <div id="heatmap-chart" class="chart-div-heatmap"></div>
+  </div>
+
+  <!-- PCA + curve shapes (40%) -->
+  <div>
+    <div class="portfolio-panel">
+      <div class="portfolio-panel-title">PCA — Explained Variance</div>
+      <div id="pca-chart" class="chart-div-pca"></div>
+      <div class="pca-section-label" id="pca-cumulative"></div>
+      <div class="pca-section-label">PC1 Loadings</div>
+      <div class="pca-loadings" id="pc1-loadings"></div>
+      <div class="pca-section-label">PC2 Loadings</div>
+      <div class="pca-loadings" id="pc2-loadings"></div>
+      <div class="pca-section-label" style="margin-top:10px">Spread Factor Map</div>
+      <div id="pca-scatter" style="height:220px"></div>
+    </div>
+
+    <div class="portfolio-panel" style="margin-top:8px">
+      <div class="portfolio-panel-title">Forward Curve Shape</div>
+      <div class="curve-mini-charts">
+        <div class="curve-mini-chart">
+          <div style="font-size:9px;color:#ef8c2f;font-weight:700;margin-bottom:2px">LE</div>
+          <div id="le-curve-chart" class="chart-div-mini-curve"></div>
+          <div id="le-convexity-sub" style="font-size:8px;color:#555;margin-top:2px"></div>
+        </div>
+        <div class="curve-mini-chart">
+          <div style="font-size:9px;color:#5ba0d0;font-weight:700;margin-bottom:2px">GF</div>
+          <div id="gf-curve-chart" class="chart-div-mini-curve"></div>
+          <div id="gf-convexity-sub" style="font-size:8px;color:#555;margin-top:2px"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block pagescript %}
+<script>
+  window.SPREAD_TIERS = {
+    {% for s in spreads %}
+    {{ s.id | tojson }}: {{ s.tier }}{% if not loop.last %},{% endif %}
+    {% endfor %}
+  };
+  initPortfolio();
+</script>
+{% endblock %}

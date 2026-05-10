@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Cattle Spreads{% endblock %}</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+  <!-- Top bar -->
+  <div class="topbar">
+    <div class="topbar-brand">CATTLE SPREADS</div>
+    <div class="data-pulse" id="data-pulse">
+      <span class="pulse-dot" id="pulse-dot"></span>
+      <span id="pulse-label">-</span>
+    </div>
+    <div class="topbar-meta" id="topbar-meta">
+      <div><strong>LE:</strong> <span id="le-front">—</span></div>
+      <div><strong>GF:</strong> <span id="gf-front">—</span></div>
+      <div><strong>EOD:</strong> <span id="updated">—</span></div>
+    </div>
+  </div>
+
+  <!-- Body -->
+  <div class="body-wrap">
+
+    <!-- Sidebar: hidden on Monitor, shown on Research + Portfolio -->
+    {% if page != 'monitor' %}
+    <div class="sidebar">
+      {% set ns = namespace(cur_tier=0) %}
+      {% for s in spreads %}
+        {% if s.tier != ns.cur_tier %}
+          {% set ns.cur_tier = s.tier %}
+          {% if s.tier == 1 %}<div class="sidebar-tier tier1-hdr">▸ Tier 1 — Critical</div>
+          {% elif s.tier == 2 %}<div class="sidebar-tier tier2-hdr">▸ Tier 2 — High</div>
+          {% elif s.tier == 3 %}<div class="sidebar-tier tier3-hdr">▸ Tier 3 — Active</div>
+          {% elif s.tier == 4 %}<div class="sidebar-tier tier4-hdr">▸ Tier 4 — Skip</div>
+          {% endif %}
+        {% endif %}
+
+        {% if s.phase2 %}
+          <div class="sidebar-item sidebar-phase2">
+            <span class="spread-id">
+              <span class="sig-dot sig-neutral"></span>{{ s.label }}
+            </span>
+            <span class="spread-val muted">P2</span>
+          </div>
+        {% else %}
+          {% set chip = chips | selectattr("id", "equalto", s.id) | first %}
+          {% set close = chip.close if chip else None %}
+          {% set pct   = chip.percentile if chip else None %}
+          {% set cscore = chip.composite_score if chip else None %}
+          {% if cscore is not none %}
+            {% if cscore <= -1.5 %}{% set dot_cls = 'sig-strong-buy' %}
+            {% elif cscore <= -0.5 %}{% set dot_cls = 'sig-mild-buy' %}
+            {% elif cscore < 0.5 %}{% set dot_cls = 'sig-neutral' %}
+            {% elif cscore < 1.5 %}{% set dot_cls = 'sig-mild-sell' %}
+            {% else %}{% set dot_cls = 'sig-strong-sell' %}
+            {% endif %}
+          {% else %}{% set dot_cls = 'sig-neutral' %}{% endif %}
+          {% set val_class = "warn" if (pct is not none and pct >= 90) else ("pos" if (close is not none and close > 0) else ("neg" if (close is not none and close < 0) else "")) %}
+          <a href="{{ '/spread/' + s.id if spread_id != s.id else '#' }}" class="sidebar-item {{ 'active' if spread_id == s.id else '' }}">
+            <span class="spread-id">
+              <span class="sig-dot {{ dot_cls }}"></span>{{ s.label }}
+            </span>
+            <span class="spread-val {{ val_class }}">
+              {% if close is not none %}{{ "%+.3f"|format(close) }}{% else %}—{% endif %}
+            </span>
+          </a>
+        {% endif %}
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Main -->
+    <div class="main">
+      <div class="view-tabs">
+        <a href="/" class="view-tab {% if page == 'monitor' %}active{% endif %}">Monitor</a>
+        <a href="#" class="view-tab {% if page == 'research' %}active{% endif %}" id="research-tab">Research</a>
+        <a href="/portfolio" class="view-tab {% if page == 'portfolio' %}active{% endif %}">Portfolio</a>
+      </div>
+      <div class="main-content">
+        {% block main %}{% endblock %}
+      </div>
+    </div>
+
+  </div><!-- /body-wrap -->
+
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <script src="/static/app.js"></script>
+  <script>
+    // Research tab always points to last visited spread
+    (function() {
+      var last = localStorage.getItem('last_spread_id') || 'LEJ-LEM';
+      document.getElementById('research-tab').href = '/spread/' + last;
+    })();
+  </script>
+  {% block pagescript %}{% endblock %}
+</body>
+</html>

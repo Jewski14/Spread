@@ -1,0 +1,21 @@
+{
+  "spreads": [
+    {"id": "LEJ-LEM",  "label": "LEJ/LEM", "full": "Apr / Jun Live Cattle",   "tier": 1, "type": "LE", "phase2": false},
+    {"id": "LEM-LEQ",  "label": "LEM/LEQ", "full": "Jun / Aug Live Cattle",   "tier": 1, "type": "LE", "phase2": false},
+    {"id": "LEQ-LEZ",  "label": "LEQ/LEZ", "full": "Aug / Dec Live Cattle",   "tier": 1, "type": "LE", "phase2": false},
+    {"id": "LEQ-LEV",  "label": "LEQ/LEV", "full": "Aug / Oct Live Cattle",   "tier": 1, "type": "LE", "phase2": false},
+    {"id": "LEG-LEJ",  "label": "LEG/LEJ", "full": "Feb / Apr Live Cattle",   "tier": 2, "type": "LE", "phase2": false},
+    {"id": "LEV-LEZ",  "label": "LEV/LEZ", "full": "Oct / Dec Live Cattle",   "tier": 2, "type": "LE", "phase2": false},
+    {"id": "LEZ-LEG",  "label": "LEZ/LEG", "full": "Dec / Feb Live Cattle",   "tier": 2, "type": "LE", "phase2": false},
+    {"id": "GFF-GFH",  "label": "GFF/GFH", "full": "Jan / Mar Feeder Cattle", "tier": 2, "type": "GF", "phase2": false},
+    {"id": "GFX-GFF",  "label": "GFX/GFF", "full": "Nov / Jan Feeder Cattle", "tier": 2, "type": "GF", "phase2": false},
+    {"id": "GFK-GFQ",  "label": "GFK/GFQ", "full": "May / Aug Feeder Cattle", "tier": 2, "type": "GF", "phase2": false},
+    {"id": "GFV-GFX",  "label": "GFV/GFX", "full": "Oct / Nov Feeder Cattle", "tier": 2, "type": "GF", "phase2": false},
+    {"id": "GFH-GFJ",  "label": "GFH/GFJ", "full": "Mar / Apr Feeder Cattle", "tier": 3, "type": "GF", "phase2": false},
+    {"id": "GFJ-GFK",  "label": "GFJ/GFK", "full": "Apr / May Feeder Cattle", "tier": 3, "type": "GF", "phase2": false},
+    {"id": "GFQ-GFU",  "label": "GFQ/GFU", "full": "Aug / Sep Feeder Cattle", "tier": 3, "type": "GF", "phase2": false},
+    {"id": "GFU-GFV",  "label": "GFU/GFV", "full": "Sep / Oct Feeder Cattle", "tier": 3, "type": "GF", "phase2": false},
+    {"id": "LEG-LEM",  "label": "LEG/LEM", "full": "Feb / Jun Live Cattle",   "tier": 4, "type": "LE", "phase2": false},
+    {"id": "LEJ-LEQ",  "label": "LEJ/LEQ", "full": "Apr / Aug Live Cattle",   "tier": 4, "type": "LE", "phase2": false}
+  ]
+}

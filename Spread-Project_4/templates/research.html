@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+{% block title %}{{ meta.label }} — Research{% endblock %}
+
+{% block main %}
+<!-- Spread header bar with DTE chips -->
+<div class="spread-header">
+  <div class="spread-header-left">
+    <a href="/spread/{{ prev_id }}" class="nav-arrow" title="Previous">&#8592;</a>
+    <div class="spread-header-info">
+      <span class="spread-header-id">{{ meta.label }}</span>
+      <span class="spread-header-full">{{ meta.full }}</span>
+      <span class="tier-badge tier{{ meta.tier }}-badge">T{{ meta.tier }}</span>
+      <span class="window-badge" id="window-badge"></span>
+      <span class="dte-chip" id="near-dte" style="display:none"></span>
+      <span class="dte-chip" id="deferred-dte" style="display:none"></span>
+    </div>
+    <a href="/spread/{{ next_id }}" class="nav-arrow" title="Next">&#8594;</a>
+  </div>
+</div>
+
+{% if meta.phase2 %}
+<div class="phase2-notice">
+  <div class="phase2-title">Phase 2 — Coming Soon</div>
+  <div class="phase2-sub">This spread requires additional data sources not yet integrated.</div>
+</div>
+{% else %}
+
+<!-- Signal bar: 6 chips -->
+<div class="signal-bar">
+  <div class="sig-chip" id="sc-composite">
+    <div class="sig-chip-label">Composite</div>
+    <div class="sig-chip-val">—</div>
+  </div>
+  <div class="sig-chip" id="sc-z-full">
+    <div class="sig-chip-label">Z-Score</div>
+    <div class="sig-chip-val">—</div>
+  </div>
+  <div class="sig-chip" id="sc-z-260d">
+    <div class="sig-chip-label">Z 260d</div>
+    <div class="sig-chip-val">—</div>
+  </div>
+  <div class="sig-chip" id="sc-pct">
+    <div class="sig-chip-label">Percentile</div>
+    <div class="sig-chip-val">—</div>
+  </div>
+  <div class="sig-chip" id="sc-roll-yield">
+    <div class="sig-chip-label">Roll Yield</div>
+    <div class="sig-chip-val">—</div>
+  </div>
+  <div class="sig-chip" id="sc-ou-hl">
+    <div class="sig-chip-label">OU Half-Life</div>
+    <div class="sig-chip-val">—</div>
+  </div>
+</div>
+
+<!-- Bias Summary -->
+<div class="bias-summary" id="bias-summary"></div>
+
+<!-- Two-column research layout -->
+<div class="research-layout">
+
+  <!-- Charts column (60%) -->
+  <div class="charts-col">
+
+    <!-- Chart 1: Seasonal overlay -->
+    <div class="chart-card">
+      <div class="chart-card-header">
+        <span class="chart-card-title">Seasonal Pattern</span>
+        <div class="chart-toggles">
+          <button class="tog active" id="tog-prior" onclick="togglePriorYears()">Prior Yrs</button>
+          <button class="tog active" id="tog-band"  onclick="toggleBand()">Avg Band</button>
+          <button class="tog" id="tog-5yr"  onclick="setSeasonalWindow(5)">5yr</button>
+          <button class="tog active" id="tog-10yr" onclick="setSeasonalWindow(10)">10yr</button>
+          <button class="tog" id="tog-15yr" onclick="setSeasonalWindow(15)">15yr</button>
+        </div>
+      </div>
+      <div id="seasonal-chart" class="chart-div"></div>
+    </div>
+
+    <!-- Chart 2: Full history -->
+    <div class="chart-card">
+      <div class="chart-card-header">
+        <span class="chart-card-title">Full History</span>
+        <div class="chart-toggles">
+          <button class="tog" id="tog-1y"  onclick="setHistoryZoom('1y')">1Y</button>
+          <button class="tog" id="tog-3y"  onclick="setHistoryZoom('3y')">3Y</button>
+          <button class="tog" id="tog-5y"  onclick="setHistoryZoom('5y')">5Y</button>
+          <button class="tog active" id="tog-all" onclick="setHistoryZoom('all')">All</button>
+        </div>
+      </div>
+      <div id="history-chart" class="chart-div"></div>
+    </div>
+
+    <!-- Chart 3: Rolling Z-score 260d -->
+    <div class="chart-card">
+      <div class="chart-card-header">
+        <span class="chart-card-title">Rolling Z-Score (500d)</span>
+      </div>
+      <div id="zscore-chart" class="chart-div-sml"></div>
+    </div>
+
+    <!-- Chart 4: Close + Z-Score Overlay -->
+    <div class="chart-card">
+      <div class="chart-card-header">
+        <span class="chart-card-title">Current Year: Close + Z-Score</span>
+      </div>
+      <div id="overlay-chart" class="chart-div-rsib"></div>
+    </div>
+
+  </div>
+
+  <!-- Metric grid (40%) -->
+  <div class="metric-grid">
+
+    <div class="metric-section">
+      <div class="metric-section-title">Spread Valuation</div>
+      <div class="metric-cards" id="ms-technical"></div>
+    </div>
+
+    <div class="metric-section">
+      <div class="metric-section-title">Mean Reversion</div>
+      <div class="metric-cards" id="ms-mean-rev"></div>
+    </div>
+
+    <div class="metric-section">
+      <div class="metric-section-title">Risk</div>
+      <div class="metric-cards" id="ms-risk"></div>
+    </div>
+
+    <div class="metric-section">
+      <div class="metric-section-title">Seasonal</div>
+      <div class="metric-cards" id="ms-seasonal"></div>
+    </div>
+
+    <div class="metric-section">
+      <div class="metric-section-title">Carry &amp; Structure</div>
+      <div class="metric-cards" id="ms-carry"></div>
+    </div>
+
+  </div>
+
+</div><!-- /research-layout -->
+{% endif %}
+{% endblock %}
+
+{% block pagescript %}
+<script>
+  window.SPREAD_ID   = {{ meta.id | tojson }};
+  window.SPREAD_META = {{ meta | tojson }};
+  initResearch();
+</script>
+{% endblock %}

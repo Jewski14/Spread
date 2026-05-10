@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}Monitor — Cattle Spreads{% endblock %}
+
+{% block main %}
+<!-- Regime strip: 8 cells -->
+<div class="regime-strip">
+  <div class="regime-cell" id="rc-structure">
+    <div class="rc-label">Market Structure</div>
+    <div class="rc-val" id="rc-structure-val">—</div>
+  </div>
+  <div class="regime-cell" id="rc-le-slope">
+    <div class="rc-label">LE Slope</div>
+    <div class="rc-val" id="rc-le-slope-val">—</div>
+    <div class="rc-sub" id="rc-le-slope-sub">front–back</div>
+  </div>
+  <div class="regime-cell">
+    <div class="rc-label">GF Slope</div>
+    <div class="rc-val" id="rc-gf-slope-val">—</div>
+    <div class="rc-sub" id="rc-gf-slope-sub">front–back</div>
+  </div>
+  <div class="regime-cell">
+    <div class="rc-label">Extremes</div>
+    <div class="rc-val" id="rc-extremes-val">—</div>
+    <div class="rc-sub">≥ 90th pct</div>
+  </div>
+  <div class="regime-cell">
+    <div class="rc-label">GSCI Roll</div>
+    <div class="rc-val" id="rc-gsci-val">—</div>
+  </div>
+  <div class="regime-cell">
+    <div class="rc-label">BCOM Roll</div>
+    <div class="rc-val" id="rc-bcom-val">—</div>
+  </div>
+  <div class="regime-cell">
+    <div class="rc-label">COT LE</div>
+    <div class="rc-val" id="rc-cot-le-val">—</div>
+    <div class="rc-sub" id="rc-cot-le-sub"></div>
+  </div>
+  <div class="regime-cell">
+    <div class="rc-label">COT GF</div>
+    <div class="rc-val" id="rc-cot-gf-val">—</div>
+    <div class="rc-sub" id="rc-cot-gf-sub"></div>
+  </div>
+</div>
+
+<!-- Mini curve bars: LE + GF compact -->
+<div class="mini-curves">
+  <div class="mini-curve-panel">
+    <div class="mini-curve-label le">LE</div>
+    <div class="mini-curve-bars" id="le-mini-bars"></div>
+    <div class="mini-curve-prices" id="le-mini-prices"></div>
+  </div>
+  <div class="mini-curve-panel">
+    <div class="mini-curve-label gf">GF</div>
+    <div class="mini-curve-bars" id="gf-mini-bars"></div>
+    <div class="mini-curve-prices" id="gf-mini-prices"></div>
+  </div>
+</div>
+
+<!-- Signal table -->
+<div class="signal-table-wrap">
+  <table class="signal-table" id="signal-table">
+    <thead>
+      <tr>
+        <th data-col="id">Spread</th>
+        <th data-col="composite_score">Signal</th>
+        <th data-col="close">Close</th>
+        <th data-col="percentile">Percentile</th>
+        <th data-col="zscore_full">Z-Score</th>
+        <th data-col="roll_yield">Roll Yield</th>
+        <th data-col="change">Change</th>
+      </tr>
+    </thead>
+    <tbody id="signal-table-body"></tbody>
+  </table>
+</div>
+{% endblock %}
+
+{% block pagescript %}
+<script>initMonitor();</script>
+{% endblock %}
